@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wave 2</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          angle = 0,
+          range = 50,
+          centerY = canvas.height / 2,
+          xSpeed = 1,
+          ySpeed = 0.05,
+          xPos = 0,
+          yPos = centerY;
+
+        context.lineWidth = 2;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+
+          context.beginPath();
+          context.moveTo(xPos, yPos);
+
+          // Calculate the new position
+          xPos += xSpeed;
+          angle += ySpeed;
+          yPos = centerY + Math.sin(angle) * range;
+          context.lineTo(xPos, yPos);
+          context.stroke();
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

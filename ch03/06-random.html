@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          ball = new Ball(),
+          angleX = 0,
+          angleY = 0,
+          range = 50,
+          centerX = canvas.width / 2,
+          centerY = canvas.height / 2,
+          xSpeed = 0.07,
+          ySpeed = 0.11;
+
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          ball.x = centerX + Math.sin(angleX) * range;
+          ball.y = centerY + Math.sin(angleY) * range;
+          angleX += xSpeed;
+          angleY += ySpeed;
+          ball.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

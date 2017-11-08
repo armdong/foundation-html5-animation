@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Distance</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <textarea id="log"></textarea>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas),
+          log = document.getElementById('log'),
+          rect = { x: canvas.width / 2, y: canvas.height / 2 };
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          var dx = rect.x - mouse.x,
+            dy = rect.y - mouse.y,
+            dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+          
+          // Draw square
+          context.fillStyle = '#000000';
+          context.fillRect(rect.x - 2, rect.y - 2, 4, 4);
+
+          // Draw line
+          context.beginPath();
+          context.moveTo(rect.x, rect.y);
+          context.lineTo(mouse.x, mouse.y);
+          context.closePath();
+          context.stroke();
+        
+          // log output of distance value to screen.
+          log.value = 'distance: ' + dist;
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

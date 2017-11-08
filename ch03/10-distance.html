@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Distance</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <textarea id="log"></textarea>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          log = document.getElementById('log');
+        
+        // Create a black square, assign random position.
+        var rect1 = {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height
+        };
+        context.fillStyle = '#000000';
+        context.fillRect(rect1.x - 2, rect1.y - 2, 4, 4);
+        
+        // Create a red square, assign random position.
+        var rect2 = {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height
+        };
+        context.fillStyle = '#ff0000';
+        context.fillRect(rect2.x - 2, rect2.y - 2, 4, 4);
+
+        // Calculate the distance between the two squares.
+        var dx = rect1.x - rect2.x,
+          dy = rect1.y - rect2.y,
+          dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        
+        // log output of distance value to screen.
+        log.value = 'distance: ' + dist;
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
