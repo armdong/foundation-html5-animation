@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceleration 3</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          ball = new Ball(),
+          vx = 0,   // velocity of x axis
+          vy = 0,   // velocity of y axis
+          ax = 0,   // acceleration of x axis
+          ay = 0;   // acceleration of y axis
+
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+
+        window.addEventListener('keydown', function(e) {
+          switch(e.keyCode) {
+            case 37:      // left
+              ax = -0.1;
+              break;
+            case 39:      // right
+              ax = 0.1;
+              break;
+            case 38:      // up
+              ay = -0.1;
+              break;
+            case 40:      // down
+              ay = 0.1;
+          }
+        }, false);
+
+        window.addEventListener('keyup', function(e) {
+          ax = 0;
+          ay = 0;
+        }, false);
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          vx += ax;
+          vy += ay;
+          ball.x += vx;
+          ball.y += vy;
+          ball.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Follow Mouse</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/arrow.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas),
+          arrow = new Arrow(),
+          speed = 3;
+
+        arrow.x = canvas.width / 2;
+        arrow.y = canvas.height / 2;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          var dx = mouse.x - arrow.x,
+            dy = mouse.y - arrow.y,
+            angle = Math.atan2(dy, dx),   // radians
+            vx = Math.cos(angle) * speed, // velocity of x axis
+            vy = Math.sin(angle) * speed; // velocity of y axis
+          
+          arrow.rotation = angle;
+          arrow.x += vx;
+          arrow.y += vy;
+          arrow.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
