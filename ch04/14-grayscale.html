@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grayscale</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="640" height="360"></canvas>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d');
+
+        // draw some red, green, and blue stripes
+        for (var i = 0; i < canvas.width; i += 10) {
+          for (var j = 0; j < canvas.height; j += 10) {
+            context.fillStyle = (i % 20 === 0) ? '#f00' : ((i % 30 === 0) ? '#0f0' : '#00f');
+            context.fillRect(i, j, 10, 10);
+          }
+        }
+
+        var imagedata = context.getImageData(0, 0, canvas.width, canvas.height),
+          pixels = imagedata.data;
+
+        // pixel iteration
+        for (var offset = 0, len = pixels.length; offset < len; offset += 4) {
+          var r = pixels[offset],
+            g = pixels[offset + 1],
+            b = pixels[offset + 2],
+            y = (0.2126 * r) + (0.7152 * g) + (0.0722 * b); // luminance
+
+          pixels[offset] = pixels[offset + 1] = pixels[offset + 2]  = y;
+        }
+
+        context.putImageData(imagedata, 0, 0);
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invert Color</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="640" height="360"></canvas>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d');
+
+        // draw some red, green, and blue stripes
+        for (var i = 0; i < canvas.width; i += 10) {
+          for (var j = 0; j < canvas.height; j += 10) {
+            context.fillStyle = (i % 20 === 0) ? '#f00' : ((i % 30 === 0) ? '#0f0' : '#00f');
+            context.fillRect(i, j, 10, 10);
+          }
+        }
+
+        var imagedata = context.getImageData(0, 0, canvas.width, canvas.height),
+          pixels = imagedata.data;
+
+        // pixel iteration
+        for (var offset = 0, len = pixels.length; offset < len; offset += 4) {
+
+          // invert each color component of the pixel: r, g, b, a (0-255)
+          pixels[offset]      = 255 - pixels[offset];
+          pixels[offset + 1]  = 255 - pixels[offset + 1];
+          pixels[offset + 2]  = 255 - pixels[offset + 2];
+
+          // pixels[offset + 3] is alpha (the fourth component)
+        }
+
+        context.putImageData(imagedata, 0, 0);
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

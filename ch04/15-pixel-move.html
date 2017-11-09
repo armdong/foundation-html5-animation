@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixel Move</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="640" height="360"></canvas>
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas);
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+
+          // draw some red, green, and blue stripes
+          for (var i = 0; i < canvas.width; i += 10) {
+            for (var j = 0; j < canvas.height; j += 10) {
+              context.fillStyle = (i % 20 === 0) ? '#f00' : ((i % 30 === 0) ? '#0f0' : '#00f');
+              context.fillRect(i, j, 10, 10);
+            }
+          }
+
+          var imagedata = context.getImageData(0, 0, canvas.width, canvas.height),
+            pixels = imagedata.data;
+
+          for (var y = 0; y < imagedata.height; y++) {
+            for (var x = 0; x < imagedata.width; x++) {
+              var dx = x - mouse.x,
+                dy = y - mouse.y,
+                dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)),
+                offset = (x + y * imagedata.width) * 4,
+                r = pixels[offset],
+                g = pixels[offset + 1],
+                b = pixels[offset + 2];
+
+              pixels[offset]      = Math.cos(r * dist * 0.001) * 256;
+              pixels[offset + 1]  = Math.cos(g * dist * 0.001) * 256;
+              pixels[offset + 2]  = Math.cos(b * dist * 0.0005) * 256;
+            }
+          }
+
+          context.putImageData(imagedata, 0, 0);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

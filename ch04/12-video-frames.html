@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Frames</title>
+  <link rel="stylesheet" href="../includes/style.css">
+  <style>
+    #movieclip {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="640" height="360"></canvas>
+  <video id="movieclip" width="640" height="360" autoplay loop>
+    <source src="./assets/movieclip.mp4" type="video/mp4" />
+    <source src="./assets/movieclip.webm" type="video/webm" />
+    <source src="./assets/movieclip.ogv" type="video/ogv" />
+    <p>This browser does not support the <code>video</code> element.</p>
+  </video>
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          video = document.getElementById('movieclip');
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+
+          context.drawImage(video, 0, 0);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

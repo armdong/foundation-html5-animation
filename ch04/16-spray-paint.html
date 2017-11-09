@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spray Paint</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas),
+          imagedata = context.getImageData(0, 0, canvas.width, canvas.height),
+          pixels = imagedata.data,
+          brush_size = 25,
+          brush_density = 50,
+          brush_color;
+
+        function onMouseMove() {
+
+          // loop over each brush point
+          for (var i = 0; i < brush_density; i++) {
+            var angle = Math.random() * Math.PI * 2,
+              radius = Math.random() * brush_size,
+              xPos = (mouse.x + Math.cos(angle) * radius) | 0, // remove decimal
+              yPos = (mouse.y + Math.sin(angle) * radius) | 0,
+              offset = (xPos + yPos * imagedata.width) * 4;
+
+            // pixel component colors: r, g, b, a (0-255)
+            pixels[offset]      = brush_color >> 16 & 0xff; // red
+            pixels[offset + 1]  = brush_color >> 8 & 0xff;  // green
+            pixels[offset + 2]  = brush_color & 0xff;       // blue
+            pixels[offset + 3]  = 255;                      // alpha
+          }
+
+          context.putImageData(imagedata, 0, 0);
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+          brush_color = utils.parseColor(Math.random() * 0xffffff, true); // to number
+          canvas.addEventListener('mousemove', onMouseMove, false);
+        }, false);
+
+        canvas.addEventListener('mouseup', function(e) {
+          canvas.removeEventListener('mousemove', onMouseMove, false);
+        }, false);
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

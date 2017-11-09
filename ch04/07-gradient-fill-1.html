@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gradient Fill 1</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          point1 = { x: 0, y: 0 },
+          point2 = { x: 100, y: 100 },
+          gradient = context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+
+        // gradient from white to red
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(1, '#ff0000');
+
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, 100, 100);
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

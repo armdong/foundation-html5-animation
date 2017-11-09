@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gradient Fill Radial</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          point1 = { x: 150, y: 150, radius: 0 },
+          point2 = { x: 150, y: 150, radius: 50 },
+          gradient = context.createRadialGradient(point1.x, point1.y, point1.radius, 
+            point2.x, point2.y, point2.radius);
+
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        // gradient.addColorStop(0, '#ffffff');
+        // gradient.addColorStop(0.5, '#0000ff');
+        // gradient.addColorStop(1, '#ff0000');
+
+        context.fillStyle = gradient;
+        context.fillRect(100, 100, 100, 100);
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

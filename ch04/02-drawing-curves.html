@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drawing Curves</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas),
+          points = [{
+            x: 100,
+            y: 200
+          }, {
+            x: 300,
+            y: 200
+          }];
+
+        canvas.addEventListener('mousemove', function(e) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          context.beginPath();
+          context.moveTo(points[0].x, points[0].y);
+          context.quadraticCurveTo(mouse.x, mouse.y, points[1].x, points[1].y);
+          context.stroke();
+        }, false);
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
