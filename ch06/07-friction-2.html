@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Friction 2</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          ball = new Ball(),
+          friction = 0.95,
+          vx = Math.random() * 10 - 5,
+          vy = Math.random() * 10 - 5;
+
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          Math.abs(vx) > 0.001 ? (vx *= friction) : (vx = 0);
+          Math.abs(vy) > 0.001 ? (vy *= friction) : (vy = 0);
+
+          ball.x += vx;
+          ball.y += vy;
+
+          ball.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
