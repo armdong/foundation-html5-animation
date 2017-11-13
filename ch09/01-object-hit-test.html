@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Object Hit Test</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <textarea id="log"></textarea>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          log = document.getElementById('log'),
+          mouse = utils.captureMouse(canvas),
+          ballA = new Ball(),
+          ballB = new Ball();
+
+        ballA.x = canvas.width / 2;
+        ballA.y = canvas.height / 2;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          ballB.x = mouse.x;
+          ballB.y = mouse.y;
+
+          if (utils.intersects(ballA.getBounds(), ballB.getBounds())) {
+            log.value = 'Hit!';
+          } else {
+            log.value = '';
+          }
+
+          ballA.draw(context);
+          ballB.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

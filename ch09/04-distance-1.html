@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Distance 1</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <textarea id="log"></textarea>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas),
+          log = document.getElementById('log'),
+          ballA = new Ball(30, '#ff0000'),
+          ballB = new Ball(30, '#00ff00');
+
+        ballA.x = canvas.width / 2;
+        ballA.y = canvas.height / 2;
+        
+        canvas.addEventListener('mousemove', drawFrame, false);
+        drawFrame();
+
+        function drawFrame() {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          ballB.x = mouse.x;
+          ballB.y = mouse.y;
+
+          var dx = ballB.x - ballA.x,
+            dy = ballB.y - ballA.y,
+            dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+          if (dist < 60) {
+            log.value = 'Hit!';
+          } else {
+            log.value = '';
+          }
+
+          ballA.draw(context);
+          ballB.draw(context);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
