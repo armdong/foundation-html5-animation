@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring 3</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          ball = new Ball(),
+          spring = 0.03,
+          friction = 0.95,
+          target = {
+            x: canvas.width / 2,
+            y: canvas.height / 2
+          },
+          vx = 0,
+          vy = 0;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          var dx = target.x - ball.x,
+            dy = target.y - ball.y,
+            ax = dx * spring,
+            ay = dy * spring;
+          
+          vx += ax;
+          vy += ay;
+          vx *= friction;
+          vy *= friction;
+          ball.x += vx;
+          ball.y += vy;
+
+          ball.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
