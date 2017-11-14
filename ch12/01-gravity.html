@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gravity</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/particle.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          particles = [],
+          numParticles = 30;
+
+        for (var particle, i = 0; i < numParticles; i++) {
+          particle = new Particle(5, Math.random() * 0xffffff);
+          particle.x = Math.random() * canvas.width;
+          particle.y = Math.random() * canvas.height;
+          particle.mass = 1;
+          particles.push(particle);
+        }
+
+        function draw(particle) {
+          particle.draw(context);
+        }
+
+        function move(particle, i) {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          for (var anotherParticle, j = i + 1; j < numParticles; j++) {
+            anotherParticle = particles[j];
+            gravitate(particle, anotherParticle);
+          }
+        }
+
+        function gravitate(partA, partB) {
+          var dx = partB.x - partA.x,
+            dy = partB.y - partA.y,
+            distSQ = Math.pow(dx, 2) + Math.pow(dy, 2),
+            dist = Math.sqrt(distSQ),
+            force = partA.mass * partB.mass / distSQ,
+            ax = force * dx / dist,
+            ay = force * dy / dist;
+
+          partA.vx += ax / partA.mass;
+          partA.vy += ay / partA.mass;
+          partB.vx -= ax / partB.mass;
+          partB.vy -= ay / partB.mass;
+        }
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          
+          particles.forEach(move);
+          particles.forEach(draw);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

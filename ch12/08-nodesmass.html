@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nodes Mass</title>
+  <link rel="stylesheet" href="../includes/style.css">
+  <style>
+    #canvas {background-color: #000;}
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="800"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/particle.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          particles = [],
+          numParticles = 60,
+          minDist = 100,
+          springAmount = 0.0005;
+
+        for (var size, particle, i = 0; i < numParticles; i++) {
+          size = Math.random() * 10 + 2;
+          particle = new Particle(size, '#ffffff');
+          particle.x = Math.random() * canvas.width;
+          particle.y = Math.random() * canvas.height;
+          particle.vx = Math.random() * 6 - 3;
+          particle.vy = Math.random() * 6 - 3;
+          particle.mass = size;
+          particles.push(particle);
+        }
+
+        function spring(partA, partB) {
+          var dx = partB.x - partA.x,
+            dy = partB.y - partA.y,
+            dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+          if (dist < minDist) {
+            var alpha = 1 - dist / minDist;
+            context.strokeStyle = utils.colorToRGB('#ffffff', alpha);
+            context.beginPath();
+            context.moveTo(partA.x, partA.y);
+            context.lineTo(partB.x, partB.y);
+            context.stroke();
+
+            var ax = dx * springAmount,
+              ay = dy * springAmount;
+
+            partA.vx += ax / partA.mass;
+            partA.vy += ay / partA.mass;
+            partB.vx -= ax / partB.mass;
+            partB.vy -= ay / partB.mass;
+          }
+        }
+
+        function move(particle, i) {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          if (particle.x - particle.radius > canvas.width) {
+            particle.x = -particle.radius;
+          } else if (particle.x + particle.radius < 0) {
+            particle.x = canvas.width + particle.radius;
+          }
+
+          if (particle.y - particle.radius > canvas.height) {
+            particle.y = -particle.radius;
+          } else if (particle.y + particle.radius < 0) {
+            particle.y = canvas.height + particle.radius;
+          }
+
+          for (var anotherParticle, j = i + 1; j < numParticles; j++) {
+            anotherParticle = particles[j];
+            spring(particle, anotherParticle);
+          }
+        }
+
+        function draw(particle) {
+          particle.draw(context);
+        }
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          
+          particles.forEach(move);
+          particles.forEach(draw);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
