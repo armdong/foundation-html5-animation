@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rotate 2</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          ball = new Ball(30),
+          vr = 0.05,
+          cos = Math.cos(vr),
+          sin = Math.sin(vr),
+          center = { x: canvas.width / 2, y: canvas.height / 2 };
+
+        ball.x = Math.random() * canvas.width;
+        ball.y = Math.random() * canvas.height;
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          var x1 = ball.x - center.x,
+            y1 = ball.y - center.y,
+            x2 = x1 * cos - y1 * sin,
+            y2 = y1 * cos + x1 * sin;
+
+          ball.x = center.x + x2;
+          ball.y = center.y + y2;
+
+          ball.draw(context);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rotate 3</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="800" height="800"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/ball.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          mouse = utils.captureMouse(canvas),
+          balls = [],
+          numBalls = 10,
+          vr = 0.05,
+          center = { x: canvas.width / 2, y: canvas.height / 2 },
+          cos, sin;
+
+        for (var ball, i = 0; i < numBalls; i++) {
+          ball = new Ball(Math.random() * 40 + 5, Math.random() * 0xffffff);
+          ball.x = Math.random() * canvas.width;
+          ball.y = Math.random() * canvas.height;
+          balls.push(ball);
+        }
+
+        function move(ball) {
+          var x1 = ball.x - center.x,
+            y1 = ball.y - center.y,
+            x2 = x1 * cos - y1 * sin,
+            y2 = y1 * cos + x1 * sin;
+
+          ball.x = center.x + x2;
+          ball.y = center.y + y2;
+        }
+
+        function draw(ball) {
+          ball.draw(context);
+        }
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame, canvas);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          var angle = (mouse.x - center.x) * 0.0005;
+          cos = Math.cos(angle);
+          sin = Math.sin(angle);
+
+          balls.forEach(move);
+          balls.forEach(draw);
+        })();
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
