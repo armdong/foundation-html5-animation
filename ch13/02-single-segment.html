@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Single Segment</title>
+  <link rel="stylesheet" href="../includes/style.css">
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <!-- loading scripts -->
+  <script src="../includes/utils.js"></script>
+  <script src="./components/segment.js"></script>
+  <script src="./components/slider.js"></script>
+  <script>
+    (function(window, document, undefined) {
+
+      function handler4DomReady(e) {
+        var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          segment = new Segment(100, 20),
+          slider = new Slider(-90, 90, 0);
+
+        segment.x = 100;
+        segment.y = 100;
+
+        slider.x = 300;
+        slider.y = 20;
+        slider.captureMouse(canvas);
+        slider.onchange = drawFrame;
+
+        function drawFrame() {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          segment.rotation = slider.value * Math.PI / 180;
+          segment.draw(context);
+          slider.draw(context);
+        }
+
+        drawFrame(); // call once for initial display
+      }
+
+      document.addEventListener('DOMContentLoaded', handler4DomReady, false);
+
+    })(window, document);
+  </script>
+</body>
+</html>
